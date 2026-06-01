@@ -34,6 +34,11 @@ export const metadata: Metadata = {
       "Сайты без конструкторов и шаблонов. Фокус на заявки, скорость и доверие к бренду.",
     locale: "ru_RU",
     type: "website",
+    images: [{ url: "/logo.png", width: 325, height: 124, alt: "Не шаблон" }],
+  },
+  icons: {
+    icon: [{ url: "/favicon.png", type: "image/png" }],
+    apple: [{ url: "/apple-icon.png", type: "image/png" }],
   },
 };
 

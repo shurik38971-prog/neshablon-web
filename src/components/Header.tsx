@@ -3,6 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { Logo } from "@/components/Logo";
 import { Button } from "@/components/ui/Button";
 import { TelegramButton } from "@/components/ui/TelegramButton";
 import { navLinks } from "@/lib/content";
@@ -34,12 +35,7 @@ export function Header() {
       }`}
     >
       <div className="section-container flex h-[4.5rem] items-center justify-between sm:h-20">
-        <Link
-          href="/"
-          className="font-display text-xl font-semibold tracking-tight text-white transition-colors hover:text-gold sm:text-2xl"
-        >
-          Не шаблон
-        </Link>
+        <Logo priority />
 
         <nav
           className="hidden items-center gap-8 lg:flex xl:gap-10"

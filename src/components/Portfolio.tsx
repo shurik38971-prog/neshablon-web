@@ -94,7 +94,6 @@ export function Portfolio() {
                     </Button>
                     {!reduceMotion && (
                       <span className="hidden text-sm text-muted sm:inline">
-                        Откроется в новой вкладке
                       </span>
                     )}
                   </div>

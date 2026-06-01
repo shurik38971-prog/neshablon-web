@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { Logo } from "@/components/Logo";
 import { TelegramButton } from "@/components/ui/TelegramButton";
 import { navLinks } from "@/lib/content";
 
@@ -10,12 +11,7 @@ export function Footer() {
       <div className="section-container">
         <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
           <div className="max-w-sm">
-            <Link
-              href="/"
-              className="font-display text-2xl font-semibold text-white"
-            >
-              Не шаблон
-            </Link>
+            <Logo />
             <p className="mt-4 text-sm leading-relaxed text-muted">
               Премиальные сайты для малого и среднего бизнеса в России — без
               шаблонов, с фокусом на заявки.
