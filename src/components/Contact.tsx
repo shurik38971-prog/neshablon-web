@@ -67,7 +67,7 @@ export function Contact() {
           return;
         }
 
-        setStatus("error");
+        setStatus(result.error === "delivery_failed" ? "config_error" : "error");
         setErrorMessage(
           result.message ?? "Не удалось отправить заявку. Попробуйте Telegram или позже.",
         );

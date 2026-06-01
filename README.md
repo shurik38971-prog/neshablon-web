@@ -38,8 +38,10 @@ npm run start
 **Telegram (рекомендуется):**
 
 1. Создайте бота через [@BotFather](https://t.me/BotFather), скопируйте `TELEGRAM_BOT_TOKEN`.
-2. Напишите боту любое сообщение.
-3. Узнайте `TELEGRAM_CHAT_ID` через [@userinfobot](https://t.me/userinfobot) или `https://api.telegram.org/bot<TOKEN>/getUpdates`.
+2. **Обязательно** откройте бота и нажмите **Start** (/start).
+3. Узнайте `TELEGRAM_CHAT_ID` через [@userinfobot](https://t.me/userinfobot) (число, например `123456789`).
+4. В **Vercel → Settings → Environment Variables** добавьте переменные **без кавычек** → **Redeploy**.
+5. Проверка локально: `node --env-file=.env.local scripts/test-telegram.mjs`
 
 **Почта (Yandex):**
 
