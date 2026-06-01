@@ -8,7 +8,7 @@ import { Section } from "@/components/ui/Section";
 import { TelegramButton } from "@/components/ui/TelegramButton";
 import { site } from "@/lib/content";
 
-type FormState = "idle" | "submitting" | "success" | "error";
+type FormState = "idle" | "submitting" | "success" | "error" | "config_error";
 
 const inputClass =
   "w-full rounded-xl border border-border bg-surface/60 px-5 py-3.5 text-base text-white placeholder:text-muted/60 transition-colors focus:border-gold/50 focus:outline-none focus:ring-1 focus:ring-gold/30 sm:py-4 sm:text-sm";
@@ -21,22 +21,65 @@ const trustPoints = [
 
 export function Contact() {
   const [status, setStatus] = useState<FormState>("idle");
+  const [errorMessage, setErrorMessage] = useState("");
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setStatus("submitting");
+    setErrorMessage("");
 
     const form = e.currentTarget;
     const data = new FormData(form);
 
-    if (!data.get("name") || !data.get("phone")) {
+    const name = String(data.get("name") ?? "").trim();
+    const phone = String(data.get("phone") ?? "").trim();
+
+    if (!name || !phone) {
       setStatus("error");
+      setErrorMessage("Заполните обязательные поля: имя и телефон.");
       return;
     }
 
-    await new Promise((r) => setTimeout(r, 800));
-    setStatus("success");
-    form.reset();
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name,
+          phone,
+          email: String(data.get("email") ?? "").trim() || undefined,
+          message: String(data.get("message") ?? "").trim() || undefined,
+        }),
+      });
+
+      const result = (await response.json().catch(() => ({}))) as {
+        error?: string;
+        message?: string;
+      };
+
+      if (!response.ok) {
+        if (result.error === "not_configured") {
+          setStatus("config_error");
+          setErrorMessage(
+            result.message ??
+              "Отправка с сайта ещё не настроена. Напишите нам в Telegram — ответим быстрее.",
+          );
+          return;
+        }
+
+        setStatus("error");
+        setErrorMessage(
+          result.message ?? "Не удалось отправить заявку. Попробуйте Telegram или позже.",
+        );
+        return;
+      }
+
+      setStatus("success");
+      form.reset();
+    } catch {
+      setStatus("error");
+      setErrorMessage("Нет связи с сервером. Напишите в Telegram или попробуйте позже.");
+    }
   }
 
   return (
@@ -109,6 +152,7 @@ export function Contact() {
                   autoComplete="name"
                   className={inputClass}
                   placeholder="Как к вам обращаться"
+                  disabled={status === "submitting"}
                 />
               </label>
               <label>
@@ -122,6 +166,7 @@ export function Contact() {
                   autoComplete="tel"
                   className={inputClass}
                   placeholder="+7 (___) ___-__-__"
+                  disabled={status === "submitting"}
                 />
               </label>
               <label>
@@ -134,6 +179,7 @@ export function Contact() {
                   autoComplete="email"
                   className={inputClass}
                   placeholder="mail@company.ru"
+                  disabled={status === "submitting"}
                 />
               </label>
               <label className="sm:col-span-2">
@@ -145,18 +191,24 @@ export function Contact() {
                   rows={4}
                   className={`${inputClass} resize-none`}
                   placeholder="Ниша, сроки, что важно на сайте"
+                  disabled={status === "submitting"}
                 />
               </label>
             </div>
 
-            {status === "error" && (
+            {(status === "error" || status === "config_error") && errorMessage && (
               <p className="mt-4 text-sm text-red-400" role="alert">
-                Заполните обязательные поля: имя и телефон.
+                {errorMessage}
               </p>
+            )}
+            {status === "config_error" && (
+              <div className="mt-4">
+                <TelegramButton variant="primary" className="w-full py-3.5 text-sm" />
+              </div>
             )}
             {status === "success" && (
               <p className="mt-4 text-sm text-gold" role="status">
-                Спасибо! Мы свяжемся с вами в ближайшее время.
+                Спасибо! Заявка отправлена — свяжемся с вами в ближайшее время.
               </p>
             )}
 

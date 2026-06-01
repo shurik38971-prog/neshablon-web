@@ -31,7 +31,22 @@ npm run start
 - `src/lib/content.ts` — тексты, кейсы, блок «Почему мы»
 - `.env.local` — URL живых проектов (см. `.env.example`)
 
-Контактная форма готова к подключению API (сейчас имитирует отправку на клиенте).
+### Заявки с формы
+
+Скопируйте `.env.example` в `.env.local` (локально) и добавьте те же переменные в **Vercel → Settings → Environment Variables**.
+
+**Telegram (рекомендуется):**
+
+1. Создайте бота через [@BotFather](https://t.me/BotFather), скопируйте `TELEGRAM_BOT_TOKEN`.
+2. Напишите боту любое сообщение.
+3. Узнайте `TELEGRAM_CHAT_ID` через [@userinfobot](https://t.me/userinfobot) или `https://api.telegram.org/bot<TOKEN>/getUpdates`.
+
+**Почта (Yandex):**
+
+1. Включите пароль приложения в Яндекс ID.
+2. Заполните `SMTP_*` и `CONTACT_TO_EMAIL=neshablon-web@yandex.ru`.
+
+Нужен **хотя бы один** канал (Telegram или SMTP), иначе форма покажет подсказку написать в Telegram.
 
 ### Ссылки на кейсы
 
