@@ -1,32 +1,39 @@
 /** Замените liveUrl на URL опубликованных кейсов */
 export const advantages = [
   {
-    title: "Индивидуальный дизайн",
+    title: "Не используем шаблоны",
     description:
-      "Уникальная визуальная система под ваш бренд — без типовых блоков и «как у всех».",
+      "Каждый сайт проектируем с нуля под ваш бренд — без Tilda, Wix и готовых тем WordPress.",
   },
   {
-    title: "Быстрый запуск",
+    title: "Адаптация под мобильные устройства",
     description:
-      "Чёткий процесс и фокус на MVP: от брифа до рабочего сайта за 3–7 дней.",
+      "Вёрстка под смартфоны и планшеты: удобные кнопки, читаемый текст, быстрая запись с телефона.",
   },
   {
-    title: "Адаптация под мобильные",
+    title: "Быстрая загрузка сайта",
     description:
-      "Идеальная вёрстка на смартфонах — где сегодня приходит большинство клиентов.",
+      "Оптимизация изображений и кода — страницы открываются за секунды, Lighthouse 90+.",
   },
   {
     title: "Поддержка после запуска",
     description:
-      "Помогаем с правками, аналитикой и развитием сайта после публикации.",
+      "Правки, аналитика, новые блоки и развитие сайта — не бросаем после публикации.",
   },
 ] as const;
 
 export const stats = [
-  { value: "3", label: "готовых проекта" },
   { value: "100%", label: "адаптивность" },
   { value: "90+", label: "Lighthouse" },
-  { value: "Next.js", label: "+ React стек" },
+  { value: "<2 сек", label: "загрузка страницы" },
+] as const;
+
+export const techStack = [
+  { name: "Next.js", description: "Современный фреймворк для быстрых сайтов" },
+  { name: "React", description: "Интерактивные интерфейсы без перезагрузок" },
+  { name: "TypeScript", description: "Надёжный код без скрытых ошибок" },
+  { name: "Vercel", description: "Стабильный хостинг и мгновенные обновления" },
+  { name: "Supabase", description: "Базы данных и авторизация при необходимости" },
 ] as const;
 
 export const whyUs = [
@@ -60,7 +67,6 @@ export const projects = [
       "Увеличили количество заявок за счёт удобной онлайн-записи и понятной структуры услуг.",
     result: "Онлайн-запись · доверие к врачам · рост обращений",
     image: "/portfolio/case-dental.jpg",
-    /** Ссылка на живой сайт. Пустая строка — кнопка «Обсудить похожий» */
     liveUrl: "https://premium-dental-clinic-bay.vercel.app",
   },
   {
@@ -119,9 +125,8 @@ export const site = {
 
 export const navLinks = [
   { label: "Преимущества", href: "#advantages" },
-  { label: "Почему мы", href: "#why-us" },
-  { label: "Кейсы", href: "#portfolio" },
+  { label: "Проекты", href: "#portfolio" },
+  { label: "Стек", href: "#stack" },
   { label: "Процесс", href: "#process" },
-  { label: "Отзывы", href: "#testimonials" },
   { label: "Контакты", href: "#contact" },
 ] as const;

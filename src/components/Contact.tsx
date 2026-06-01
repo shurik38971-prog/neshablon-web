@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { FormEvent, useState } from "react";
 import { SectionHeading } from "@/components/SectionHeading";
 import { Button } from "@/components/ui/Button";
+import { TelegramButton } from "@/components/ui/TelegramButton";
 import { Reveal } from "@/components/ui/Reveal";
 import { site } from "@/lib/content";
 
@@ -11,20 +12,6 @@ type FormState = "idle" | "submitting" | "success" | "error";
 
 const inputClass =
   "w-full rounded-xl border border-border bg-surface/60 px-5 py-4 text-sm text-white placeholder:text-muted/60 transition-colors focus:border-gold/50 focus:outline-none focus:ring-1 focus:ring-gold/30";
-
-function TelegramIcon() {
-  return (
-    <svg
-      width="18"
-      height="18"
-      viewBox="0 0 24 24"
-      fill="currentColor"
-      aria-hidden="true"
-    >
-      <path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.82 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z" />
-    </svg>
-  );
-}
 
 export function Contact() {
   const [status, setStatus] = useState<FormState>("idle");
@@ -81,15 +68,10 @@ export function Contact() {
               </ul>
 
               <div className="mt-8">
-                <Button
-                  href={site.telegram}
-                  variant="secondary"
-                  external
-                  className="gap-2.5"
-                >
-                  <TelegramIcon />
-                  Написать в Telegram
-                </Button>
+                <TelegramButton
+                  variant="primary"
+                  className="w-full px-8 py-4 text-base sm:w-auto"
+                />
               </div>
             </Reveal>
           </div>
@@ -164,22 +146,17 @@ export function Contact() {
               )}
 
               <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+                <TelegramButton
+                  variant="primary"
+                  className="order-first w-full sm:order-none sm:w-auto"
+                />
                 <Button
                   type="submit"
-                  variant="primary"
+                  variant="secondary"
                   className="w-full sm:w-auto"
                   disabled={status === "submitting"}
                 >
                   {status === "submitting" ? "Отправка…" : "Отправить заявку"}
-                </Button>
-                <Button
-                  href={site.telegram}
-                  variant="ghost"
-                  external
-                  className="w-full gap-2 sm:w-auto"
-                >
-                  <TelegramIcon />
-                  Telegram
                 </Button>
               </div>
 

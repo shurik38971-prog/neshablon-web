@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/Button";
+import { TelegramButton } from "@/components/ui/TelegramButton";
 
 export function Hero() {
   return (
@@ -40,22 +41,23 @@ export function Hero() {
           transition={{ duration: 0.7, delay: 0.35 }}
           className="mx-auto mt-8 max-w-2xl text-base leading-relaxed text-muted sm:text-lg"
         >
-          Создаём современные сайты для компаний, 
-          которые хотят выделяться среди конкурентов 
-          и получать заявки через интернет.
+          Создаём современные сайты для компаний, которые хотят выделяться среди
+          конкурентов и получать заявки через интернет.
         </motion.p>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.5 }}
-          className="mt-12 flex flex-col items-center justify-center gap-4 sm:flex-row"
+          className="mt-12 flex flex-col items-stretch justify-center gap-4 sm:flex-row sm:items-center"
         >
-          <Button href="#contact" variant="primary">
-            Обсудить проект
-          </Button>
-          <Button href="#portfolio" variant="secondary">
-            Смотреть кейсы
+          <TelegramButton
+            variant="primary"
+            className="w-full px-8 py-4 text-base sm:w-auto"
+            label="Написать в Telegram"
+          />
+          <Button href="#portfolio" variant="secondary" className="w-full sm:w-auto">
+            Смотреть проекты
           </Button>
         </motion.div>
 
@@ -66,9 +68,9 @@ export function Hero() {
           className="mt-24 flex justify-center"
         >
           <a
-            href="#advantages"
+            href="#portfolio"
             className="flex flex-col items-center gap-2 text-xs uppercase tracking-widest text-muted transition-colors hover:text-gold"
-            aria-label="Прокрутить вниз"
+            aria-label="Прокрутить к проектам"
           >
             <span>Листайте</span>
             <motion.span
