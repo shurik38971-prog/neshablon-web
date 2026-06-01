@@ -61,7 +61,7 @@ export const projects = [
     result: "Онлайн-запись · доверие к врачам · рост обращений",
     image: "/portfolio/case-dental.jpg",
     /** Ссылка на живой сайт. Пустая строка — кнопка «Обсудить похожий» */
-    liveUrl: "",
+    liveUrl: "https://premium-dental-clinic-bay.vercel.app",
   },
   {
     id: "realestate",
@@ -70,7 +70,7 @@ export const projects = [
       "Премиальный сайт недвижимости с акцентом на дорогие объекты и получение заявок от покупателей.",
     result: "Премиум-подача · каталог объектов · заявки от покупателей",
     image: "/portfolio/case-realestate.jpg",
-    liveUrl: "",
+    liveUrl: "https://prestige-estates-sigma.vercel.app",
   },
   {
     id: "barbershop",
@@ -79,7 +79,7 @@ export const projects = [
       "Упростили запись и усилили имидж бренда — гости записываются через мессенджер за пару кликов.",
     result: "Запись в 2 клика · сильный визуал · рост повторных визитов",
     image: "/portfolio/case-barbershop.jpg",
-    liveUrl: "",
+    liveUrl: "https://barber-premium-gamma.vercel.app",
   },
 ] as const;
 
@@ -113,8 +113,8 @@ export const testimonials = [
 
 export const site = {
   email: "hello@neshablon.ru",
-  telegram: "https://t.me/neshablon",
-  telegramHandle: "@neshablon",
+  telegram: "https://t.me/neshablon_web",
+  telegramHandle: "@neshablon_web",
 } as const;
 
 export const navLinks = [

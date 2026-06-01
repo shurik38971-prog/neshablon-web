@@ -19,8 +19,7 @@ export function Portfolio() {
 
         <div className="flex flex-col gap-16 lg:gap-24">
           {projects.map((project, index) => {
-            const hasLiveUrl =
-              Boolean(project.liveUrl) && project.liveUrl !== "#";
+            const hasLiveUrl = Boolean(project.liveUrl);
 
             return (
               <Reveal key={project.id} delay={0.1}>
