@@ -1,4 +1,21 @@
 /** Замените liveUrl на URL опубликованных кейсов */
+export const hero = {
+  eyebrow: "Веб-студия для бизнеса в России",
+  title: "Сайты, которые превращают трафик в",
+  highlight: "заявки и продажи",
+  subtitle:
+    "Проектируем и разрабатываем премиальные сайты без шаблонов и конструкторов — для клиник, недвижимости, салонов и локального сервиса.",
+  trustLine: "Ответ в Telegram в течение рабочего дня · бесплатная консультация",
+} as const;
+
+export const niches = [
+  "Стоматологии",
+  "Недвижимость",
+  "Салоны красоты",
+  "Барбершопы",
+  "Локальный бизнес",
+] as const;
+
 export const advantages = [
   {
     title: "Не используем шаблоны",
@@ -118,14 +135,14 @@ export const testimonials = [
 ] as const;
 
 export const site = {
-  email: "hello@neshablon.ru",
+  email: "neshablon-web@yandex.ru",
   telegram: "https://t.me/neshablon_web",
   telegramHandle: "@neshablon_web",
 } as const;
 
 export const navLinks = [
-  { label: "Преимущества", href: "#advantages" },
   { label: "Проекты", href: "#portfolio" },
+  { label: "Преимущества", href: "#advantages" },
   { label: "Стек", href: "#stack" },
   { label: "Процесс", href: "#process" },
   { label: "Контакты", href: "#contact" },

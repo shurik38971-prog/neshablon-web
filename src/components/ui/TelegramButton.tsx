@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/Button";
 import { site } from "@/lib/content";
+import type { ComponentPropsWithoutRef } from "react";
 
 function TelegramIcon() {
   return (
@@ -19,12 +20,13 @@ type TelegramButtonProps = {
   variant?: "primary" | "secondary";
   className?: string;
   label?: string;
-};
+} & Pick<ComponentPropsWithoutRef<"a">, "onClick">;
 
 export function TelegramButton({
   variant = "primary",
   className = "",
   label = "Написать в Telegram",
+  onClick,
 }: TelegramButtonProps) {
   return (
     <Button
@@ -32,6 +34,7 @@ export function TelegramButton({
       variant={variant}
       external
       className={`gap-2.5 ${className}`}
+      onClick={onClick}
     >
       <TelegramIcon />
       {label}

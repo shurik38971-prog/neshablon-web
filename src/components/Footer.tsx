@@ -1,23 +1,28 @@
 import Link from "next/link";
+import { TelegramButton } from "@/components/ui/TelegramButton";
 import { navLinks } from "@/lib/content";
 
 export function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-border py-16">
-      <div className="mx-auto max-w-7xl px-6 lg:px-10">
-        <div className="flex flex-col gap-12 md:flex-row md:items-start md:justify-between">
-          <div>
+    <footer className="border-t border-border pb-24 pt-14 md:pb-16">
+      <div className="section-container">
+        <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:justify-between">
+          <div className="max-w-sm">
             <Link
               href="/"
               className="font-display text-2xl font-semibold text-white"
             >
               Не шаблон
             </Link>
-            <p className="mt-4 max-w-xs text-sm text-muted">
-              Премиальные сайты для малого и среднего бизнеса в России.
+            <p className="mt-4 text-sm leading-relaxed text-muted">
+              Премиальные сайты для малого и среднего бизнеса в России — без
+              шаблонов, с фокусом на заявки.
             </p>
+            <div className="mt-6">
+              <TelegramButton variant="secondary" className="text-sm" />
+            </div>
           </div>
 
           <nav
@@ -36,13 +41,11 @@ export function Footer() {
           </nav>
         </div>
 
-        <div className="gold-line mt-12 mb-8 w-full opacity-60" />
+        <div className="gold-line my-10 w-full opacity-50" />
 
-        <div className="flex flex-col gap-4 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-3 text-xs text-muted sm:flex-row sm:items-center sm:justify-between">
           <p>© {year} Не шаблон. Все права защищены.</p>
-          <p className="text-muted/80">
-            ИП · разработка сайтов · Москва и вся Россия
-          </p>
+          <p>Разработка сайтов · Москва и вся Россия</p>
         </div>
       </div>
     </footer>

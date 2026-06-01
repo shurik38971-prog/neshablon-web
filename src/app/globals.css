@@ -3,11 +3,14 @@
 :root {
   --background: #050505;
   --foreground: #fafafa;
-  --muted: #8a8a8a;
+  --muted: #9a9a9a;
   --gold: #c9a962;
   --gold-light: #e0c98a;
-  --surface: #0f0f0f;
+  --surface: #0c0c0c;
+  --surface-elevated: #141414;
   --border: rgba(255, 255, 255, 0.08);
+  --section-y: clamp(4.5rem, 10vw, 9rem);
+  --container-x: clamp(1.25rem, 4vw, 2.5rem);
 }
 
 @theme inline {
@@ -17,6 +20,7 @@
   --color-gold: var(--gold);
   --color-gold-light: var(--gold-light);
   --color-surface: var(--surface);
+  --color-surface-elevated: var(--surface-elevated);
   --color-border: var(--border);
   --font-sans: var(--font-manrope);
   --font-display: var(--font-cormorant);
@@ -30,10 +34,19 @@ html {
   scroll-behavior: smooth;
 }
 
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-manrope), system-ui, sans-serif;
+  font-feature-settings: "kern" 1, "liga" 1;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
 }
 
 ::selection {
@@ -46,7 +59,7 @@ body {
   position: fixed;
   inset: 0;
   z-index: 50;
-  opacity: 0.035;
+  opacity: 0.03;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
 }
 
@@ -61,8 +74,45 @@ body {
 }
 
 .text-gradient-gold {
-  background: linear-gradient(135deg, #fafafa 0%, #c9a962 50%, #fafafa 100%);
+  background: linear-gradient(135deg, #fafafa 0%, #c9a962 45%, #e8d5a3 70%, #fafafa 100%);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
+}
+
+.section-container {
+  width: 100%;
+  max-width: 80rem;
+  margin-inline: auto;
+  padding-inline: var(--container-x);
+}
+
+.section-padding {
+  padding-block: var(--section-y);
+}
+
+.eyebrow {
+  font-size: 0.6875rem;
+  font-weight: 500;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+.prose-muted {
+  font-size: clamp(1rem, 2vw, 1.125rem);
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.card-premium {
+  border: 1px solid var(--border);
+  background: color-mix(in srgb, var(--surface) 80%, transparent);
+  border-radius: 1rem;
+  transition: border-color 0.4s ease, box-shadow 0.4s ease;
+}
+
+.card-premium:hover {
+  border-color: rgba(201, 169, 98, 0.28);
+  box-shadow: 0 0 0 1px rgba(201, 169, 98, 0.06), 0 24px 48px -24px rgba(0, 0, 0, 0.6);
 }

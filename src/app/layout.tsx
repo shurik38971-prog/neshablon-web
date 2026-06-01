@@ -17,20 +17,20 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "Не шаблон — премиальные сайты для бизнеса",
+  title: "Не шаблон — сайты для бизнеса, которые приносят заявки",
   description:
-    "Разрабатываем современные сайты для бизнеса в России. Без шаблонов, без конструкторов, с акцентом на результат.",
+    "Премиальная веб-студия: индивидуальные сайты без шаблонов для клиник, недвижимости, салонов и локального бизнеса. Next.js, быстрый запуск, поддержка.",
   keywords: [
     "веб-студия",
     "разработка сайтов",
+    "сайт под ключ",
     "сайт для бизнеса",
-    "дизайн сайта",
     "Не шаблон",
   ],
   openGraph: {
-    title: "Не шаблон — сайты, которые выглядят дороже своей стоимости",
+    title: "Не шаблон — премиальные сайты для бизнеса",
     description:
-      "Индивидуальные сайты для клиник, недвижимости, салонов и локального бизнеса.",
+      "Сайты без конструкторов и шаблонов. Фокус на заявки, скорость и доверие к бренду.",
     locale: "ru_RU",
     type: "website",
   },
@@ -43,7 +43,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru" className={`${cormorant.variable} ${manrope.variable}`}>
-      <body className="min-h-screen antialiased overflow-x-hidden">
+      <body className="min-h-screen overflow-x-hidden antialiased">
         <div className="grain" aria-hidden="true" />
         {children}
       </body>

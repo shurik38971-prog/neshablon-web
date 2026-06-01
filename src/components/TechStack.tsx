@@ -1,32 +1,38 @@
 import { SectionHeading } from "@/components/SectionHeading";
 import { Reveal } from "@/components/ui/Reveal";
+import { Section } from "@/components/ui/Section";
 import { techStack } from "@/lib/content";
 
 export function TechStack() {
   return (
-    <section id="stack" className="border-t border-border py-28 lg:py-36">
-      <div className="mx-auto max-w-7xl px-6 lg:px-10">
-        <SectionHeading
-          label="Технологии"
-          title="Современный стек"
-          description="Не конструктор и не шаблон — профессиональная разработка на инструментах уровня зарубежных студий."
-        />
+    <Section id="stack" className="scroll-mt-20 bg-surface/30">
+      <SectionHeading
+        label="Технологии"
+        title="Современный стек"
+        description="Не конструктор — профессиональная разработка на инструментах уровня зарубежных продуктовых команд."
+        align="center"
+        className="mx-auto"
+      />
 
-        <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
-          {techStack.map((item, index) => (
-            <Reveal key={item.name} delay={index * 0.06}>
-              <li className="group flex h-full flex-col rounded-2xl border border-border bg-surface/50 p-6 transition-colors hover:border-gold/35">
-                <span className="font-display text-2xl text-white transition-colors group-hover:text-gold">
-                  {item.name}
-                </span>
-                <p className="mt-3 text-xs leading-relaxed text-muted">
-                  {item.description}
-                </p>
-              </li>
-            </Reveal>
-          ))}
-        </ul>
-      </div>
-    </section>
+      <ul className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        {techStack.map((item, index) => (
+          <Reveal key={item.name} delay={index * 0.05}>
+            <li className="card-premium flex h-full flex-col p-5 sm:p-6">
+              <span className="font-display text-xl text-white sm:text-2xl">{item.name}</span>
+              <p className="mt-2 text-xs leading-relaxed text-muted sm:text-sm">
+                {item.description}
+              </p>
+            </li>
+          </Reveal>
+        ))}
+      </ul>
+
+      <Reveal delay={0.2}>
+        <p className="mx-auto mt-10 max-w-2xl text-center text-sm text-muted">
+          Клиенту не обязательно разбираться в технологиях — важно, что сайт быстрый,
+          надёжный и готов к росту.
+        </p>
+      </Reveal>
+    </Section>
   );
 }

@@ -3,15 +3,16 @@
 import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import { navLinks } from "@/lib/content";
 import { Button } from "@/components/ui/Button";
+import { TelegramButton } from "@/components/ui/TelegramButton";
+import { navLinks } from "@/lib/content";
 
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 24);
+    const onScroll = () => setScrolled(window.scrollY > 20);
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
@@ -28,19 +29,22 @@ export function Header() {
     <header
       className={`fixed inset-x-0 top-0 z-40 transition-all duration-500 ${
         scrolled
-          ? "border-b border-border bg-background/80 backdrop-blur-xl"
+          ? "border-b border-border bg-background/85 backdrop-blur-xl shadow-[0_8px_32px_-8px_rgba(0,0,0,0.5)]"
           : "bg-transparent"
       }`}
     >
-      <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6 lg:px-10">
+      <div className="section-container flex h-[4.5rem] items-center justify-between sm:h-20">
         <Link
           href="/"
-          className="font-display text-2xl font-semibold tracking-tight text-white transition-colors hover:text-gold"
+          className="font-display text-xl font-semibold tracking-tight text-white transition-colors hover:text-gold sm:text-2xl"
         >
           Не шаблон
         </Link>
 
-        <nav className="hidden items-center gap-10 md:flex" aria-label="Основная навигация">
+        <nav
+          className="hidden items-center gap-8 lg:flex xl:gap-10"
+          aria-label="Основная навигация"
+        >
           {navLinks.map((link) => (
             <Link
               key={link.href}
@@ -52,8 +56,9 @@ export function Header() {
           ))}
         </nav>
 
-        <div className="hidden md:block">
-          <Button href="#contact" variant="primary">
+        <div className="hidden items-center gap-3 md:flex">
+          <TelegramButton variant="secondary" className="!px-5 !py-2.5 text-xs" label="Telegram" />
+          <Button href="#contact" variant="primary" className="!px-5 !py-2.5 text-xs">
             Обсудить проект
           </Button>
         </div>
@@ -89,18 +94,18 @@ export function Header() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="fixed inset-0 z-40 bg-background/95 backdrop-blur-2xl md:hidden"
+            className="fixed inset-0 z-40 bg-background/98 backdrop-blur-2xl md:hidden"
           >
             <nav
-              className="flex h-full flex-col items-center justify-center gap-8"
+              className="flex h-full flex-col items-center justify-center gap-7 px-6"
               aria-label="Мобильная навигация"
             >
               {navLinks.map((link, i) => (
                 <motion.div
                   key={link.href}
-                  initial={{ opacity: 0, y: 16 }}
+                  initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.06 }}
+                  transition={{ delay: i * 0.05 }}
                 >
                   <Link
                     href={link.href}
@@ -111,8 +116,18 @@ export function Header() {
                   </Link>
                 </motion.div>
               ))}
-              <Button href="#contact" variant="primary" onClick={() => setMenuOpen(false)}>
-                Обсудить проект
+              <TelegramButton
+                variant="primary"
+                className="mt-2 w-full max-w-xs"
+                onClick={() => setMenuOpen(false)}
+              />
+              <Button
+                href="#contact"
+                variant="secondary"
+                className="w-full max-w-xs"
+                onClick={() => setMenuOpen(false)}
+              >
+                Оставить заявку
               </Button>
             </nav>
           </motion.div>

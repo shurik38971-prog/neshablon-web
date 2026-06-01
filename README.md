@@ -2,21 +2,27 @@
 
 Премиальный лендинг веб-студии: Next.js 16, TypeScript, Tailwind CSS 4, Framer Motion.
 
-## Запуск
+## Запуск локально
+
+**Разработка** (горячая перезагрузка):
 
 ```bash
 npm install
 npm run dev
 ```
 
-Откройте [http://localhost:3000](http://localhost:3000).
-
-## Сборка
+**Продакшен локально** (сначала сборка, потом сервер):
 
 ```bash
 npm run build
-npm start
+npm run start
 ```
+
+Или одной командой: `npm run preview`
+
+Откройте в браузере: **http://localhost:3000** (не `/upload` и не папку проекта).
+
+> `npm run build` **не запускает сайт** — только собирает файлы в `.next`. После сборки нужен `npm run start` или `npm run dev`.
 
 ## Структура
 
