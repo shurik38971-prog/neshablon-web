@@ -15,11 +15,11 @@ export function Logo({ className = "", priority = false }: LogoProps) {
     >
       <Image
         src="/logo.png"
-        alt="Не шаблон — digital studio"
-        width={325}
-        height={124}
+        alt="Не шаблон"
+        width={540}
+        height={96}
         priority={priority}
-        className="h-9 w-auto sm:h-11"
+        className="h-8 w-auto sm:h-10 md:h-11"
       />
     </Link>
   );

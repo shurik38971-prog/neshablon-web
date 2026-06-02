@@ -1,3 +1,4 @@
+import { About } from "@/components/About";
 import { Advantages } from "@/components/Advantages";
 import { Contact } from "@/components/Contact";
 import { CtaBand } from "@/components/CtaBand";
@@ -33,6 +34,7 @@ export default function Home() {
           description="Покажем референсы, согласуем этапы и запустим разработку без лишней бюрократии."
           primaryTelegram
         />
+        <About />
         <Process />
         <Testimonials />
         <TelegramCta />

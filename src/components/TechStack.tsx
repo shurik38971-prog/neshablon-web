@@ -26,13 +26,6 @@ export function TechStack() {
           </Reveal>
         ))}
       </ul>
-
-      <Reveal delay={0.2}>
-        <p className="mx-auto mt-10 max-w-2xl text-center text-sm text-muted">
-          Клиенту не обязательно разбираться в технологиях — важно, что сайт быстрый,
-          надёжный и готов к росту.
-        </p>
-      </Reveal>
     </Section>
   );
 }
