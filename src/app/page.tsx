@@ -1,5 +1,6 @@
 import { About } from "@/components/About";
 import { Advantages } from "@/components/Advantages";
+import { Services } from "@/components/Services";
 import { Contact } from "@/components/Contact";
 import { CtaBand } from "@/components/CtaBand";
 import { Footer } from "@/components/Footer";
@@ -27,6 +28,7 @@ export default function Home() {
           description="Расскажите о бизнесе в Telegram — предложим структуру, сроки и ориентир по бюджету."
         />
         <Advantages />
+        <Services />
         <TechStack />
         <WhyUs />
         <CtaBand
@@ -34,8 +36,8 @@ export default function Home() {
           description="Покажем референсы, согласуем этапы и запустим разработку без лишней бюрократии."
           primaryTelegram
         />
-        <About />
         <Process />
+        <About />
         <Testimonials />
         <TelegramCta />
         <Contact />

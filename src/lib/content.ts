@@ -129,12 +129,44 @@ export const processSteps = [
   },
 ] as const;
 
+export const services = [
+  {
+    id: "landing",
+    title: "Лендинг",
+    features: [
+      "1–10 экранов",
+      "адаптивная версия",
+      "форма заявок",
+      "Telegram-интеграция",
+    ],
+    price: "От 30 000 ₽",
+    highlighted: false,
+  },
+  {
+    id: "services-site",
+    title: "Сайт услуг",
+    features: ["несколько страниц", "услуги", "отзывы", "SEO-подготовка"],
+    price: "От 50 000 ₽",
+    highlighted: true,
+  },
+  {
+    id: "premium",
+    title: "Премиальный сайт",
+    features: [
+      "уникальный дизайн",
+      "анимации",
+      "сложные формы",
+      "интеграции",
+    ],
+    price: "От 80 000 ₽",
+    highlighted: false,
+  },
+] as const;
+
 export const about = {
-  greeting: "Привет! Меня зовут Александр.",
-  paragraphs: [
-    "Я создаю современные сайты для бизнеса: от лендингов и сайтов услуг до более сложных проектов с интеграциями и автоматизацией.",
-    "Для меня важно не просто сделать красивый дизайн, а создать сайт, который помогает привлекать клиентов и развивать бизнес.",
-  ],
+  title: "Не шаблон",
+  description:
+    "Небольшая веб-студия. Создаём современные сайты для бизнеса: медицины, недвижимости, локальных услуг и других направлений. Работаем напрямую — без менеджеров и посредников.",
 } as const;
 
 export const testimonials = [
@@ -166,8 +198,8 @@ export const site = {
 
 export const navLinks = [
   { label: "Проекты", href: "#portfolio" },
-  { label: "Преимущества", href: "#advantages" },
-  { label: "Стек", href: "#stack" },
+  { label: "Услуги", href: "#services" },
+  { label: "О студии", href: "#about" },
   { label: "Процесс", href: "#process" },
   { label: "Контакты", href: "#contact" },
 ] as const;

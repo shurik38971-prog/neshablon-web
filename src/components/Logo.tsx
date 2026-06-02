@@ -17,9 +17,9 @@ export function Logo({ className = "", priority = false }: LogoProps) {
         src="/logo.png"
         alt="Не шаблон"
         width={540}
-        height={96}
+        height={150}
         priority={priority}
-        className="h-8 w-auto sm:h-10 md:h-11"
+        className="h-9 w-auto sm:h-11 md:h-12"
       />
     </Link>
   );
