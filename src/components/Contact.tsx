@@ -22,6 +22,7 @@ const trustPoints = [
 export function Contact() {
   const [status, setStatus] = useState<FormState>("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const [formStartedAt, setFormStartedAt] = useState(() => Date.now());
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -49,6 +50,8 @@ export function Contact() {
           phone,
           email: String(data.get("email") ?? "").trim() || undefined,
           message: String(data.get("message") ?? "").trim() || undefined,
+          website: String(data.get("website") ?? "").trim(),
+          formStartedAt,
         }),
       });
 
@@ -76,6 +79,7 @@ export function Contact() {
 
       setStatus("success");
       form.reset();
+      setFormStartedAt(Date.now());
     } catch {
       setStatus("error");
       setErrorMessage("Нет связи с сервером. Напишите в Telegram или попробуйте позже.");
@@ -140,6 +144,17 @@ export function Contact() {
             onSubmit={handleSubmit}
             className="card-premium p-6 sm:p-8 md:p-10"
           >
+            <div className="absolute -left-[10000px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
+              <label>
+                Сайт
+                <input
+                  type="text"
+                  name="website"
+                  tabIndex={-1}
+                  autoComplete="off"
+                />
+              </label>
+            </div>
             <div className="grid gap-4 sm:grid-cols-2 sm:gap-5">
               <label className="sm:col-span-2">
                 <span className="mb-2 block text-xs uppercase tracking-wider text-muted">
