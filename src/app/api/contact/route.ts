@@ -118,8 +118,8 @@ function isBotSubmission(body: unknown, request: Request) {
   if (!Number.isFinite(elapsed)) return true;
   if (elapsed < MIN_FORM_FILL_MS || elapsed > MAX_FORM_AGE_MS) return true;
   if (blockedPhoneDigits.has(phone)) return true;
-  if (suspiciousTestPhone.test(phone) && suspiciousTestName.test(name)) return true;
-  if (/^флуд\s*тест(?:\s*\d+)?$/i.test(name)) return true;
+  if (suspiciousTestPhone.test(phone)) return true;
+  if (suspiciousTestName.test(name)) return true;
 
   return false;
 }
