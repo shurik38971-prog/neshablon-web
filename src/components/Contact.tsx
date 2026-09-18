@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useCallback, useEffect, useState } from "react";
 import { SectionHeading } from "@/components/SectionHeading";
 import { Button } from "@/components/ui/Button";
 import { Reveal } from "@/components/ui/Reveal";
@@ -22,7 +22,35 @@ const trustPoints = [
 export function Contact() {
   const [status, setStatus] = useState<FormState>("idle");
   const [errorMessage, setErrorMessage] = useState("");
-  const [formStartedAt, setFormStartedAt] = useState(() => Date.now());
+  const [formToken, setFormToken] = useState("");
+
+  const refreshFormToken = useCallback(async () => {
+    try {
+      const response = await fetch("/api/contact", { cache: "no-store" });
+      const result = (await response.json().catch(() => ({}))) as { token?: string };
+      setFormToken(response.ok && typeof result.token === "string" ? result.token : "");
+    } catch {
+      setFormToken("");
+    }
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/contact", { cache: "no-store" })
+      .then(async (response) => {
+        const result = (await response.json().catch(() => ({}))) as { token?: string };
+        return response.ok && typeof result.token === "string" ? result.token : "";
+      })
+      .then((token) => {
+        if (!cancelled) setFormToken(token);
+      })
+      .catch(() => {
+        if (!cancelled) setFormToken("");
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -41,6 +69,13 @@ export function Contact() {
       return;
     }
 
+    if (!formToken) {
+      setStatus("error");
+      setErrorMessage("Форма ещё не готова к отправке. Обновите страницу или попробуйте через несколько секунд.");
+      void refreshFormToken();
+      return;
+    }
+
     try {
       const response = await fetch("/api/contact", {
         method: "POST",
@@ -51,7 +86,7 @@ export function Contact() {
           email: String(data.get("email") ?? "").trim() || undefined,
           message: String(data.get("message") ?? "").trim() || undefined,
           website: String(data.get("website") ?? "").trim(),
-          formStartedAt,
+          formToken,
         }),
       });
 
@@ -79,7 +114,8 @@ export function Contact() {
 
       setStatus("success");
       form.reset();
-      setFormStartedAt(Date.now());
+      setFormToken("");
+      void refreshFormToken();
     } catch {
       setStatus("error");
       setErrorMessage("Нет связи с сервером. Напишите в Telegram или попробуйте позже.");

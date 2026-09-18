@@ -1,3 +1,4 @@
+import { createHash, createHmac, randomBytes, timingSafeEqual } from "node:crypto";
 import { NextResponse } from "next/server";
 import { parseContactPayload } from "@/lib/contact";
 import {
@@ -16,13 +17,69 @@ const deliveryHint =
 const MIN_FORM_FILL_MS = 2500;
 const MAX_FORM_AGE_MS = 2 * 60 * 60 * 1000;
 const RATE_LIMIT_WINDOW_MS = 10 * 60 * 1000;
-const RATE_LIMIT_MAX = 5;
+const RATE_LIMIT_MAX = 2;
 const blockedPhoneDigits = new Set(["79999999999"]);
+const suspiciousTestPhone = /^7900123456\d$/;
+const suspiciousTestName = /^(?:флуд\s*тест(?:\s*\d+)?|тест)$/i;
 
 const rateLimitStore = new Map<string, number[]>();
 
 function silentSuccess() {
   return NextResponse.json({ ok: true, delivered: [] });
+}
+
+function getFormSecret() {
+  return process.env.CONTACT_FORM_SECRET || process.env.TELEGRAM_BOT_TOKEN || process.env.SMTP_PASS || "";
+}
+
+function userAgentHash(request: Request) {
+  return createHash("sha256")
+    .update(request.headers.get("user-agent") || "unknown")
+    .digest("hex")
+    .slice(0, 24);
+}
+
+function createFormToken(request: Request) {
+  const secret = getFormSecret();
+  if (!secret) return "";
+
+  const payload = Buffer.from(
+    JSON.stringify({
+      iat: Date.now(),
+      nonce: randomBytes(12).toString("hex"),
+      ua: userAgentHash(request),
+    }),
+  ).toString("base64url");
+  const signature = createHmac("sha256", secret).update(payload).digest("base64url");
+  return `${payload}.${signature}`;
+}
+
+function verifyFormToken(token: string, request: Request) {
+  const secret = getFormSecret();
+  if (!secret) return null;
+
+  const [payload, signature] = token.split(".");
+  if (!payload || !signature) return null;
+
+  const expected = createHmac("sha256", secret).update(payload).digest();
+  let received: Buffer;
+  try {
+    received = Buffer.from(signature, "base64url");
+  } catch {
+    return null;
+  }
+  if (received.length !== expected.length || !timingSafeEqual(received, expected)) return null;
+
+  try {
+    const parsed = JSON.parse(Buffer.from(payload, "base64url").toString("utf8")) as {
+      iat?: unknown;
+      ua?: unknown;
+    };
+    if (typeof parsed.iat !== "number" || parsed.ua !== userAgentHash(request)) return null;
+    return parsed.iat;
+  } catch {
+    return null;
+  }
 }
 
 function getClientIp(request: Request) {
@@ -46,21 +103,37 @@ function isRateLimited(ip: string) {
   return false;
 }
 
-function isBotSubmission(body: unknown) {
+function isBotSubmission(body: unknown, request: Request) {
   if (!body || typeof body !== "object") return true;
 
   const record = body as Record<string, unknown>;
   const honeypot = typeof record.website === "string" ? record.website.trim() : "";
-  const startedAt = typeof record.formStartedAt === "number" ? record.formStartedAt : NaN;
-  const elapsed = Date.now() - startedAt;
+  const formToken = typeof record.formToken === "string" ? record.formToken : "";
+  const startedAt = verifyFormToken(formToken, request);
+  const elapsed = typeof startedAt === "number" ? Date.now() - startedAt : NaN;
   const phone = typeof record.phone === "string" ? record.phone.replace(/\D/g, "") : "";
+  const name = typeof record.name === "string" ? record.name.trim() : "";
 
   if (honeypot) return true;
-  if (!Number.isFinite(startedAt)) return true;
+  if (!Number.isFinite(elapsed)) return true;
   if (elapsed < MIN_FORM_FILL_MS || elapsed > MAX_FORM_AGE_MS) return true;
   if (blockedPhoneDigits.has(phone)) return true;
+  if (suspiciousTestPhone.test(phone) && suspiciousTestName.test(name)) return true;
+  if (/^флуд\s*тест(?:\s*\d+)?$/i.test(name)) return true;
 
   return false;
+}
+
+export async function GET(request: Request) {
+  const token = createFormToken(request);
+  if (!token) {
+    return NextResponse.json({ error: "not_configured" }, { status: 503 });
+  }
+
+  return NextResponse.json(
+    { token },
+    { headers: { "Cache-Control": "no-store, max-age=0" } },
+  );
 }
 
 export async function POST(request: Request) {
@@ -72,7 +145,7 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "invalid_json" }, { status: 400 });
   }
 
-  if (isBotSubmission(body) || isRateLimited(getClientIp(request))) {
+  if (isBotSubmission(body, request) || isRateLimited(getClientIp(request))) {
     return silentSuccess();
   }
 
