@@ -24,6 +24,15 @@ const suspiciousTestName = /^(?:флуд\s*тест(?:\s*\d+)?|тест)$/i;
 
 const rateLimitStore = new Map<string, number[]>();
 
+function getBlockedIps() {
+  return new Set(
+    (process.env.CONTACT_BLOCKED_IPS || "")
+      .split(",")
+      .map((value) => value.trim())
+      .filter(Boolean),
+  );
+}
+
 function silentSuccess() {
   return NextResponse.json({ ok: true, delivered: [] });
 }
@@ -103,8 +112,8 @@ function isRateLimited(ip: string) {
   return false;
 }
 
-function isBotSubmission(body: unknown, request: Request) {
-  if (!body || typeof body !== "object") return true;
+function botSubmissionReason(body: unknown, request: Request) {
+  if (!body || typeof body !== "object") return "invalid_body";
 
   const record = body as Record<string, unknown>;
   const honeypot = typeof record.website === "string" ? record.website.trim() : "";
@@ -114,14 +123,27 @@ function isBotSubmission(body: unknown, request: Request) {
   const phone = typeof record.phone === "string" ? record.phone.replace(/\D/g, "") : "";
   const name = typeof record.name === "string" ? record.name.trim() : "";
 
-  if (honeypot) return true;
-  if (!Number.isFinite(elapsed)) return true;
-  if (elapsed < MIN_FORM_FILL_MS || elapsed > MAX_FORM_AGE_MS) return true;
-  if (blockedPhoneDigits.has(phone)) return true;
-  if (suspiciousTestPhone.test(phone)) return true;
-  if (suspiciousTestName.test(name)) return true;
+  if (honeypot) return "honeypot";
+  if (!Number.isFinite(elapsed)) return "invalid_form_token";
+  if (elapsed < MIN_FORM_FILL_MS) return "too_fast";
+  if (elapsed > MAX_FORM_AGE_MS) return "expired_form_token";
+  if (blockedPhoneDigits.has(phone)) return "blocked_phone";
+  if (suspiciousTestPhone.test(phone)) return "spam_phone_pattern";
+  if (suspiciousTestName.test(name)) return "spam_name_pattern";
 
-  return false;
+  return null;
+}
+
+function logContactAttempt(data: {
+  ip: string;
+  outcome: "blocked" | "accepted" | "delivered" | "failed";
+  reason?: string;
+  delivered?: string[];
+}) {
+  console.info("contact_form", {
+    ...data,
+    at: new Date().toISOString(),
+  });
 }
 
 export async function GET(request: Request) {
@@ -145,15 +167,31 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "invalid_json" }, { status: 400 });
   }
 
-  if (isBotSubmission(body, request) || isRateLimited(getClientIp(request))) {
+  const ip = getClientIp(request);
+  if (getBlockedIps().has(ip)) {
+    logContactAttempt({ ip, outcome: "blocked", reason: "blocked_ip" });
+    return silentSuccess();
+  }
+
+  const botReason = botSubmissionReason(body, request);
+  if (botReason) {
+    logContactAttempt({ ip, outcome: "blocked", reason: botReason });
+    return silentSuccess();
+  }
+
+  if (isRateLimited(ip)) {
+    logContactAttempt({ ip, outcome: "blocked", reason: "rate_limit" });
     return silentSuccess();
   }
 
   const payload = parseContactPayload(body);
 
   if (!payload) {
+    logContactAttempt({ ip, outcome: "failed", reason: "validation" });
     return NextResponse.json({ error: "validation" }, { status: 400 });
   }
+
+  logContactAttempt({ ip, outcome: "accepted" });
 
   const channels = getNotificationChannels();
 
@@ -184,6 +222,7 @@ export async function POST(request: Request) {
   }
 
   if (delivered.length === 0) {
+    logContactAttempt({ ip, outcome: "failed", reason: `delivery_failed:${failed.join(",")}` });
     return NextResponse.json(
       {
         error: "delivery_failed",
@@ -196,5 +235,6 @@ export async function POST(request: Request) {
     );
   }
 
+  logContactAttempt({ ip, outcome: "delivered", delivered });
   return NextResponse.json({ ok: true, delivered });
 }
